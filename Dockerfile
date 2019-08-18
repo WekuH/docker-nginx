@@ -1,9 +1,9 @@
-FROM alpine:3.9
+FROM alpine:3.10
 
 LABEL maintainer="Huang Qixin huangqixin@msn.com"
 
-ARG NGINX_VERSION="1.16.0"
-ARG OPENSSL_VERSION="1.1.1b"
+ARG NGINX_VERSION="1.16.1"
+ARG OPENSSL_VERSION="1.1.1c"
 ARG PCRE_VERSION="8.43"
 ARG GPG_KEYS="B0F4253373F8F6F510D42178520A9993A1C052F8"
 RUN CONFIG="\
@@ -22,15 +22,17 @@ RUN CONFIG="\
     --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
     --user=nginx \
     --group=nginx \
+    --with-stream \
+    --with-stream_ssl_preread_module \
     --with-http_ssl_module \
     --with-http_realip_module \
     --with-http_gunzip_module \
     --with-http_gzip_static_module \
-    --with-http_geoip_module \
     --with-threads \
     --with-file-aio \
     --with-http_v2_module \
     --add-module=../ngx_brotli \
+    --add-module=../ngx_http_geoip2_module \
     --with-openssl=../openssl-${OPENSSL_VERSION} \
     --with-pcre=../pcre-${PCRE_VERSION} \
     --with-pcre-jit \
@@ -57,6 +59,7 @@ RUN CONFIG="\
     gd-dev \
     geoip-dev \
     git \
+    libmaxminddb-dev \
     && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
     && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
     && export GNUPGHOME="$(mktemp -d)" \
@@ -83,6 +86,7 @@ RUN CONFIG="\
     && tar xzf pcre-${PCRE_VERSION}.tar.gz \
     && git clone --depth=1 -b gcc.amd64 https://github.com/cloudflare/zlib.git \
     && git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotli.git \
+    && git clone --depth=1 -b 3.2 https://github.com/leev/ngx_http_geoip2_module.git \
     && cd /usr/src/nginx-$NGINX_VERSION \
     && ./configure $CONFIG \
     && make -j$(getconf _NPROCESSORS_ONLN) \
@@ -117,7 +121,7 @@ RUN CONFIG="\
     \
     # Bring in tzdata so users could set the timezones through the environment
     # variables
-    && apk add --no-cache tzdata \
+    && apk add --no-cache tzdata libmaxminddb \
     \
     # forward request and error logs to docker log collector
     && ln -sf /dev/stdout /var/log/nginx/access.log \
