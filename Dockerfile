@@ -50,6 +50,7 @@ RUN CONFIG="\
     && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
     && apk add --no-cache --virtual .build-deps \
     gcc \
+    g++ \
     libc-dev \
     make \
     linux-headers \
