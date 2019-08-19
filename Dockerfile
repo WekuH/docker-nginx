@@ -111,7 +111,7 @@ RUN CONFIG="\
     && mv /usr/bin/envsubst /tmp/ \
     \
     && runDeps="$( \
-    scanelf --needed --nobanner --format '%n#p' /usr/sbin/nginx /usr/lib/nginx/modules/*.so /tmp/envsubst \
+    scanelf --needed --nobanner --format '%n#p' /usr/sbin/nginx /tmp/envsubst \
     | tr ',' '\n' \
     | sort -u \
     | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
