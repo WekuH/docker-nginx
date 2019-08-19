@@ -86,6 +86,7 @@ RUN CONFIG="\
     && curl -fSL https://ftp.pcre.org/pub/pcre/pcre-${PCRE_VERSION}.tar.gz -o pcre-${PCRE_VERSION}.tar.gz \
     && tar xzf pcre-${PCRE_VERSION}.tar.gz \
     && git clone --depth=1 -b gcc.amd64 https://github.com/cloudflare/zlib.git \
+    && cd zlib && ./configure && cd .. \
     && git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotli.git \
     && git clone --depth=1 -b 3.2 https://github.com/leev/ngx_http_geoip2_module.git \
     && cd /usr/src/nginx-$NGINX_VERSION \
