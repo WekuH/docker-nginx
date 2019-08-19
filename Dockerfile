@@ -100,7 +100,7 @@ RUN CONFIG="\
     && install -m644 html/50x.html /usr/share/nginx/html/ \
     && ln -s ../../usr/lib/nginx/modules /etc/nginx/modules \
     && strip /usr/sbin/nginx* \
-    && strip /usr/lib/nginx/modules/*.so \
+    # && strip /usr/lib/nginx/modules/*.so \
     && rm -rf /usr/src/* \
     \
     # Bring in gettext so we can get `envsubst`, then throw
