@@ -88,7 +88,7 @@ RUN CONFIG="\
     && git clone --depth=1 -b gcc.amd64 https://github.com/cloudflare/zlib.git \
     && cd zlib && ./configure && cd .. \
     && git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotli.git \
-    && git clone --depth=1 -b 3.2 https://github.com/leev/ngx_http_geoip2_module.git \
+    && git clone --depth=1 -b 3.3 https://github.com/leev/ngx_http_geoip2_module.git \
     && cd /usr/src/nginx-$NGINX_VERSION \
     && ./configure $CONFIG \
     && make -j$(getconf _NPROCESSORS_ONLN) \
@@ -129,8 +129,8 @@ RUN CONFIG="\
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
-COPY proxy.nginx.conf /etc/nginx/nginx.conf
-COPY proxy.nginx.vh.default.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80 443
 
